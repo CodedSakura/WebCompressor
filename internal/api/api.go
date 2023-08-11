@@ -1,26 +1,15 @@
 package api
 
 import (
-	"WebCompressor/internal/utils"
-	"github.com/gin-gonic/gin"
+	"WebCompressor/internal/compression"
+	"WebCompressor/internal/repository"
 )
 
 type Api struct {
-	utils *utils.Utils
+	repository         *repository.Repository
+	compressorRegistry *compression.CompressorRegistry
 }
 
-func New(utils *utils.Utils) *Api {
-	return &Api{utils: utils}
-}
-
-func (a *Api) View(c *gin.Context) {
-	c.AbortWithStatus(501)
-}
-
-func (a *Api) Compress(c *gin.Context) {
-	c.AbortWithStatus(501)
-}
-
-func (a *Api) Status(c *gin.Context) {
-	c.AbortWithStatus(501)
+func New(repository *repository.Repository, compressorRegistry *compression.CompressorRegistry) *Api {
+	return &Api{repository: repository, compressorRegistry: compressorRegistry}
 }

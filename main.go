@@ -27,7 +27,7 @@ func main() {
 
 	viewI := view.New(repo, registry)
 
-	apiI := api.New(utilsI)
+	apiI := api.New(repo, registry)
 
 	httpI := http.New(viewI, apiI, registry)
 	httpI.RegisterPaths()
