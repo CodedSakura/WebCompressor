@@ -1,0 +1,30 @@
+<html lang="en">
+<head>
+    <title>WebCompressor</title>
+    <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<div>
+    path:
+    {{ range .path }}
+    <div>{{ . }}</div>
+    {{ end }}
+</div>
+{{ if .folders }}
+<div>
+    folders:
+    {{ range .folders }}
+    <div><a href="{{ . }}">{{ . }}</a></div>
+    {{ end }}
+</div>
+{{ end }}
+{{ if .files }}
+<div>
+    files:
+    {{ range .files }}
+    <div>{{ . }}</div>
+    {{ end }}
+</div>
+{{ end }}
+</body>
+</html>

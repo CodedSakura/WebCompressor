@@ -1,0 +1,11 @@
+:root {
+    background: #333;
+    color: #fffe;
+}
+
+a {
+    color: #55fe;
+}
+a:visited {
+    color: #95fe;
+}
