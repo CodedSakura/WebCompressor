@@ -9,11 +9,11 @@ import (
 )
 
 type Repository struct {
-	configuration configuration.Configuration
+	configuration *configuration.Configuration
 }
 
-func NewRepository(configuration configuration.Configuration) Repository {
-	return Repository{configuration: configuration}
+func New(configuration *configuration.Configuration) *Repository {
+	return &Repository{configuration: configuration}
 }
 
 func dirExists(pathName string) bool {

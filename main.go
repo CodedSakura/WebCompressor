@@ -17,9 +17,9 @@ func main() {
 		panic(err)
 	}
 
-	repo := repository.NewRepository(config)
+	repo := repository.New(config)
 
-	viewI := view.NewView(config, repo)
+	viewI := view.New(repo)
 
 	gin.ForceConsoleColor()
 

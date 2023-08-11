@@ -8,13 +8,13 @@ type Configuration struct {
 	RootPath string
 }
 
-func Read() Configuration {
+func Read() *Configuration {
 	rootPath, rootPathSet := os.LookupEnv("ROOT_PATH")
 	if !rootPathSet {
 		rootPath = "./data"
 	}
 
-	return Configuration{RootPath: rootPath}
+	return &Configuration{RootPath: rootPath}
 }
 
 func (c Configuration) Verify() error {
