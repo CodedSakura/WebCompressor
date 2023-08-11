@@ -1,9 +1,9 @@
 package main
 
 import (
-	"WebCompressor/pkg/configuration"
-	"WebCompressor/pkg/repository"
-	"WebCompressor/pkg/view"
+	"WebCompressor/internal/configuration"
+	"WebCompressor/internal/repository"
+	"WebCompressor/internal/view"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
