@@ -3,5 +3,14 @@ package view
 import "github.com/gin-gonic/gin"
 
 func (v *View) RawView(c *gin.Context) {
-	c.AbortWithStatus(501)
+	pathParam := c.Param("path")
+
+	if !v.utils.FileExists(pathParam) {
+		c.AbortWithStatus(404)
+		return
+	}
+
+	fullPath := v.utils.GetAbsolutePath(pathParam)
+
+	c.File(fullPath)
 }

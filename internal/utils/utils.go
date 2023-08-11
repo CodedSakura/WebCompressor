@@ -18,12 +18,12 @@ func New(configuration *configuration.Configuration) *Utils {
 }
 
 func (u *Utils) DirExists(relativePath string) bool {
-	stat, err := os.Stat(u.getAbsolutePath(relativePath))
+	stat, err := os.Stat(u.GetAbsolutePath(relativePath))
 	return err == nil && stat.IsDir()
 }
 
 func (u *Utils) FileExists(relativePath string) bool {
-	stat, err := os.Stat(u.getAbsolutePath(relativePath))
+	stat, err := os.Stat(u.GetAbsolutePath(relativePath))
 	return err == nil && !stat.IsDir()
 }
 
@@ -31,13 +31,13 @@ func (u *Utils) ReadDir(relativePath string) ([]os.DirEntry, error) {
 	if !u.DirExists(relativePath) {
 		return nil, errors.New("directory does not exist")
 	}
-	return os.ReadDir(u.getAbsolutePath(relativePath))
+	return os.ReadDir(u.GetAbsolutePath(relativePath))
 }
 
 func (u *Utils) CalculateDir(relativePath string) (int64, int, error) {
 	var size int64
 	var fileCount int
-	err := filepath.Walk(u.getAbsolutePath(relativePath), func(_ string, info fs.FileInfo, err error) error {
+	err := filepath.Walk(u.GetAbsolutePath(relativePath), func(_ string, info fs.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
@@ -50,6 +50,6 @@ func (u *Utils) CalculateDir(relativePath string) (int64, int, error) {
 	return size, fileCount, err
 }
 
-func (u *Utils) getAbsolutePath(relativePath string) string {
+func (u *Utils) GetAbsolutePath(relativePath string) string {
 	return path.Join(u.configuration.RootPath, relativePath)
 }
