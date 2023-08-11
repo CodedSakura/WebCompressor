@@ -1,11 +1,42 @@
 :root {
-    background: #333;
+    background: #424242;
     color: #fffe;
+    font-family: sans-serif;
 }
 
-a {
-    color: #55fe;
+a, a:visited {
+    color: #29B6F6;
+    text-decoration: none;
 }
-a:visited {
-    color: #95fe;
+
+#path {
+    display: flex;
+    flex-direction: row;
+}
+
+#path > div {
+    margin: 2px 0 4px;
+}
+
+#path > div > a {
+    background: #29B6F640;
+    padding: 4px;
+    margin: 0 2px;
+    border-radius: 4px;
+}
+
+#path > div:first-of-type > a {
+    margin-left: 0;
+}
+
+#folders {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    gap: 4px;
+}
+
+#files {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 4px;
 }

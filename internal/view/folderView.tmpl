@@ -6,34 +6,30 @@
     <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
-<div>
-    path:
-    {{- range .path }}
-    <div>{{ . }}</div>
+<div id="path">
+    <div><a href="/view/">/</a></div>
+    {{- $fullPath := "" -}}
+    {{- range .path -}}
+    {{- $fullPath = (printf "%s/%s" $fullPath .) }}
+    <div><a href="/view{{ $fullPath }}/">{{ . }}/</a></div>
     {{- end }}
 </div>
 {{- if .folders }}
-<div>
-    folders:
+<div id="folders">
     {{- range .folders }}
-    <div>
-        <div><a href="{{ .Name }}">{{ .Name }}</a></div>
-        <div>{{ .Children }}</div>
-        <div>{{ .Size }}</div>
-        <div>{{ .Change.Format "2006-01-02 15:04:05 -07:00" }}</div>
-    </div>
+    <div><a href="{{ .Name }}">{{ .Name }}</a></div>
+    <div>{{ .Children }}</div>
+    <div>{{ .Size }}</div>
+    <div>{{ .Change.Format "2006-01-02 15:04:05 -07:00" }}</div>
     {{- end }}
 </div>
 {{- end }}
 {{- if .files }}
-<div>
-    files:
+<div id="files">
     {{- range .files }}
-    <div>
-        <div>{{ .Name }}</div>
-        <div>{{ .Size }}</div>
-        <div>{{ .Change.Format "2006-01-02 15:04:05 -07:00" }}</div>
-    </div>
+    <div>{{ .Name }}</div>
+    <div>{{ .Size }}</div>
+    <div>{{ .Change.Format "2006-01-02 15:04:05 -07:00" }}</div>
     {{- end }}
 </div>
 {{- end }}
