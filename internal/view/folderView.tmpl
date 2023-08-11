@@ -21,6 +21,10 @@
     <div>{{ .Children }}</div>
     <div>{{ .Size }}</div>
     <div>{{ .Change.Format "2006-01-02 15:04:05 -07:00" }}</div>
+    <div class="download">{{ range $.compressors }}
+        <div>{{ .Extension }}</div>
+        {{ end }}
+    </div>
     {{- end }}
 </div>
 {{- end }}
@@ -30,6 +34,10 @@
     <div>{{ .Name }}</div>
     <div>{{ .Size }}</div>
     <div>{{ .Change.Format "2006-01-02 15:04:05 -07:00" }}</div>
+    <div class="download">{{ range $.compressors }}
+        <div>{{ .Extension }}</div>
+        {{ end }}
+    </div>
     {{- end }}
 </div>
 {{- end }}

@@ -6,7 +6,6 @@
 
 a, a:visited {
     color: #29B6F6;
-    text-decoration: none;
 }
 
 #path {
@@ -19,6 +18,7 @@ a, a:visited {
 }
 
 #path > div > a {
+    text-decoration: none;
     background: #29B6F640;
     padding: 4px;
     margin: 0 2px;
@@ -31,12 +31,22 @@ a, a:visited {
 
 #folders {
     display: grid;
-    grid-template-columns: 1fr auto auto auto;
+    grid-template-columns: 1fr auto auto auto auto;
     gap: 4px;
 }
 
 #files {
     display: grid;
-    grid-template-columns: 1fr auto auto;
+    grid-template-columns: 1fr auto auto auto;
     gap: 4px;
+}
+
+.download {
+    display: flex;
+    flex-direction: row;
+}
+
+.download > div {
+    margin: 0 2px;
+    text-decoration: underline;
 }

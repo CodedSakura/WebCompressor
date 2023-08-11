@@ -13,8 +13,9 @@ func (v View) FolderView(c *gin.Context) {
 	}
 
 	c.HTML(200, "folderView.tmpl", gin.H{
-		"path":    path,
-		"folders": folders,
-		"files":   files,
+		"path":        path,
+		"folders":     folders,
+		"files":       files,
+		"compressors": v.compressorRegistry.Registered,
 	})
 }
