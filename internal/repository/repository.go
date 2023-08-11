@@ -1,19 +1,13 @@
 package repository
 
 import (
-	"WebCompressor/internal/configuration"
-	"os"
+	"WebCompressor/internal/utils"
 )
 
 type Repository struct {
-	configuration *configuration.Configuration
+	utils *utils.Utils
 }
 
-func New(configuration *configuration.Configuration) *Repository {
-	return &Repository{configuration: configuration}
-}
-
-func dirExists(pathName string) bool {
-	stat, err := os.Stat(pathName)
-	return err == nil && stat.IsDir()
+func New(utils *utils.Utils) *Repository {
+	return &Repository{utils: utils}
 }

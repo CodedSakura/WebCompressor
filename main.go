@@ -5,6 +5,7 @@ import (
 	"WebCompressor/internal/configuration"
 	"WebCompressor/internal/http"
 	"WebCompressor/internal/repository"
+	"WebCompressor/internal/utils"
 	"WebCompressor/internal/view"
 )
 
@@ -19,7 +20,9 @@ func main() {
 	registry := compression.NewRegistry()
 	registry.RegisterDefault()
 
-	repo := repository.New(config)
+	utilsI := utils.New(config)
+
+	repo := repository.New(utilsI)
 
 	viewI := view.New(repo, registry)
 

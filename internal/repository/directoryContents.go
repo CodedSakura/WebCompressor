@@ -1,9 +1,7 @@
 package repository
 
 import (
-	"errors"
 	"os"
-	"path"
 	"strings"
 	"time"
 )
@@ -38,12 +36,6 @@ func fileFromDirEntry(entry os.DirEntry) *file {
 }
 
 func (r Repository) GetDirectoryContents(relativePath string) ([]string, []*directory, []*file, error) {
-	lookupPath := path.Join(r.configuration.RootPath, relativePath)
-
-	if !dirExists(lookupPath) {
-		return nil, nil, nil, errors.New("directory does not exist")
-	}
-
 	var pathParts []string
 	for _, pathPart := range strings.Split(relativePath, "/") {
 		if len(pathPart) > 0 {
@@ -51,8 +43,10 @@ func (r Repository) GetDirectoryContents(relativePath string) ([]string, []*dire
 		}
 	}
 
-	// very unlikely to encounter error, as path exists
-	dir, _ := os.ReadDir(lookupPath)
+	dir, err := r.utils.ReadDir(relativePath)
+	if err != nil {
+		return nil, nil, nil, err
+	}
 
 	var folders []*directory
 	var files []*file
