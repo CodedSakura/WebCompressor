@@ -25,7 +25,7 @@ func main() {
 
 	r := gin.Default()
 
-	r.LoadHTMLGlob("templates/*")
+	r.LoadHTMLGlob("internal/view/*.tmpl")
 
 	r.Static("/assets", "./assets")
 
