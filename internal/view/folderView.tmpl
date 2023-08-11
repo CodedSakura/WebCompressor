@@ -1,30 +1,41 @@
 <html lang="en">
 <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>WebCompressor</title>
     <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
 <div>
     path:
-    {{ range .path }}
+    {{- range .path }}
     <div>{{ . }}</div>
-    {{ end }}
+    {{- end }}
 </div>
-{{ if .folders }}
+{{- if .folders }}
 <div>
     folders:
-    {{ range .folders }}
-    <div><a href="{{ . }}">{{ . }}</a></div>
-    {{ end }}
+    {{- range .folders }}
+    <div>
+        <div><a href="{{ .Name }}">{{ .Name }}</a></div>
+        <div>{{ .Children }}</div>
+        <div>{{ .Size }}</div>
+        <div>{{ .Change.Format "2006-01-02 15:04:05 -07:00" }}</div>
+    </div>
+    {{- end }}
 </div>
-{{ end }}
-{{ if .files }}
+{{- end }}
+{{- if .files }}
 <div>
     files:
-    {{ range .files }}
-    <div>{{ . }}</div>
-    {{ end }}
+    {{- range .files }}
+    <div>
+        <div>{{ .Name }}</div>
+        <div>{{ .Size }}</div>
+        <div>{{ .Change.Format "2006-01-02 15:04:05 -07:00" }}</div>
+    </div>
+    {{- end }}
 </div>
-{{ end }}
+{{- end }}
 </body>
 </html>
