@@ -2,6 +2,7 @@ package repository
 
 import (
 	"os"
+	"path"
 	"strings"
 	"time"
 )
@@ -13,26 +14,38 @@ type file struct {
 }
 type directory struct {
 	*file
+	Size     int64
 	Children int
 }
 
-func directoryFromDirEntry(entry os.DirEntry) *directory {
-	return &directory{
-		Children: 0,
-		file:     fileFromDirEntry(entry),
+func (r *Repository) directoryFromDirEntry(relativePath string, entry os.DirEntry) (*directory, error) {
+	file, err := r.fileFromDirEntry(entry)
+	if err != nil {
+		return nil, err
 	}
+	size, children, err := r.utils.CalculateDir(path.Join(relativePath, entry.Name()))
+	if err != nil {
+		return nil, err
+	}
+
+	return &directory{
+		Children: children,
+		Size:     size,
+		file:     file,
+	}, nil
 }
 
-func fileFromDirEntry(entry os.DirEntry) *file {
+func (r *Repository) fileFromDirEntry(entry os.DirEntry) (*file, error) {
 	info, err := entry.Info()
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
+
 	return &file{
 		Name:   entry.Name(),
 		Size:   info.Size(),
 		Change: info.ModTime(),
-	}
+	}, nil
 }
 
 func (r *Repository) GetDirectoryContents(relativePath string) ([]string, []*directory, []*file, error) {
@@ -53,9 +66,17 @@ func (r *Repository) GetDirectoryContents(relativePath string) ([]string, []*dir
 
 	for _, entry := range dir {
 		if entry.IsDir() {
-			folders = append(folders, directoryFromDirEntry(entry))
+			folder, err := r.directoryFromDirEntry(relativePath, entry)
+			if err != nil {
+				return nil, nil, nil, err
+			}
+			folders = append(folders, folder)
 		} else {
-			files = append(files, fileFromDirEntry(entry))
+			file, err := r.fileFromDirEntry(entry)
+			if err != nil {
+				return nil, nil, nil, err
+			}
+			files = append(files, file)
 		}
 	}
 
