@@ -1,6 +1,7 @@
 package main
 
 import (
+	"WebCompressor/internal/compression"
 	"WebCompressor/internal/configuration"
 	"WebCompressor/internal/http"
 	"WebCompressor/internal/repository"
@@ -15,11 +16,14 @@ func main() {
 		panic(err)
 	}
 
+	registry := compression.NewRegistry()
+	registry.RegisterDefault()
+
 	repo := repository.New(config)
 
-	viewI := view.New(repo)
+	viewI := view.New(repo, registry)
 
-	httpI := http.New(viewI)
+	httpI := http.New(viewI, registry)
 	httpI.RegisterPaths()
 	httpI.Run()
 }

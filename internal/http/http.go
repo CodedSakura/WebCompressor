@@ -1,6 +1,7 @@
 package http
 
 import (
+	"WebCompressor/internal/compression"
 	"WebCompressor/internal/view"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -8,16 +9,17 @@ import (
 )
 
 type Http struct {
-	view *view.View
-	gin  *gin.Engine
+	view               *view.View
+	compressorRegistry *compression.CompressorRegistry
+	gin                *gin.Engine
 }
 
-func New(view *view.View) *Http {
+func New(view *view.View, compressorRegistry *compression.CompressorRegistry) *Http {
 	gin.ForceConsoleColor()
 
 	engine := gin.Default()
 
-	return &Http{view: view, gin: engine}
+	return &Http{view: view, compressorRegistry: compressorRegistry, gin: engine}
 }
 
 func (h Http) RegisterPaths() {
