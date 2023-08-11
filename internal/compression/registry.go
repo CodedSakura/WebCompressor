@@ -13,5 +13,5 @@ func (r *CompressorRegistry) Register(compressors ...Compressor) {
 }
 
 func (r *CompressorRegistry) RegisterDefault() {
-	r.Registered = append(r.Registered, ZipCompressor{}, TarCompressor{}, GZipCompressor{})
+	r.Registered = append(r.Registered, &ZipCompressor{}, &TarCompressor{}, &GZipCompressor{})
 }

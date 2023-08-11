@@ -22,7 +22,7 @@ func New(view *view.View, compressorRegistry *compression.CompressorRegistry) *H
 	return &Http{view: view, compressorRegistry: compressorRegistry, gin: engine}
 }
 
-func (h Http) RegisterPaths() {
+func (h *Http) RegisterPaths() {
 	h.gin.LoadHTMLGlob("internal/view/*.tmpl")
 
 	h.gin.Static("/assets", "./assets")
@@ -44,7 +44,7 @@ func (h Http) RegisterPaths() {
 	}
 }
 
-func (h Http) Run() {
+func (h *Http) Run() {
 	err := h.gin.Run()
 	if err != nil {
 		println("Failed to start webserver")

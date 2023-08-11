@@ -2,7 +2,7 @@ package view
 
 import "github.com/gin-gonic/gin"
 
-func (v View) FolderView(c *gin.Context) {
+func (v *View) FolderView(c *gin.Context) {
 	pathParam := c.Param("path")
 
 	path, folders, files, err := v.repository.GetDirectoryContents(pathParam)

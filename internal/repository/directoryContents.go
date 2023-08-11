@@ -35,7 +35,7 @@ func fileFromDirEntry(entry os.DirEntry) *file {
 	}
 }
 
-func (r Repository) GetDirectoryContents(relativePath string) ([]string, []*directory, []*file, error) {
+func (r *Repository) GetDirectoryContents(relativePath string) ([]string, []*directory, []*file, error) {
 	var pathParts []string
 	for _, pathPart := range strings.Split(relativePath, "/") {
 		if len(pathPart) > 0 {
