@@ -32,6 +32,16 @@ func (h Http) RegisterPaths() {
 	})
 
 	h.gin.GET("/view/*path", h.view.FolderView)
+	h.gin.GET("/raw/*path", h.view.RawView)
+
+	h.gin.GET("/download/:id", download)
+
+	api := h.gin.Group("/api")
+	{
+		api.GET("/view/*path", apiView)
+		api.POST("/compress/:extension", apiCompress)
+		api.GET("/status/:id", apiStatus)
+	}
 }
 
 func (h Http) Run() {
