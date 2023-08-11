@@ -1,6 +1,7 @@
 package main
 
 import (
+	"WebCompressor/internal/api"
 	"WebCompressor/internal/compression"
 	"WebCompressor/internal/configuration"
 	"WebCompressor/internal/http"
@@ -26,7 +27,9 @@ func main() {
 
 	viewI := view.New(repo, registry)
 
-	httpI := http.New(viewI, registry)
+	apiI := api.New(utilsI)
+
+	httpI := http.New(viewI, apiI, registry)
 	httpI.RegisterPaths()
 	httpI.Run()
 }
