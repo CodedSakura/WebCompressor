@@ -4,7 +4,6 @@ import (
 	"WebCompressor/internal/compression"
 	"WebCompressor/internal/configuration"
 	"WebCompressor/internal/directorySize"
-	"WebCompressor/internal/repository"
 	"github.com/gin-gonic/gin"
 	"os"
 	path2 "path"
@@ -12,14 +11,13 @@ import (
 )
 
 type folderStateEndpoint struct {
-	repository         *repository.Repository
 	config             *configuration.Configuration
 	compressorRegistry *compression.CompressorRegistry
 }
 
 //goland:noinspection GoExportedFuncWithUnexportedType
-func NewFolderStateEndpoint(repository *repository.Repository, config *configuration.Configuration, compressorRegistry *compression.CompressorRegistry) *folderStateEndpoint {
-	return &folderStateEndpoint{repository: repository, config: config, compressorRegistry: compressorRegistry}
+func NewFolderStateEndpoint(config *configuration.Configuration, compressorRegistry *compression.CompressorRegistry) *folderStateEndpoint {
+	return &folderStateEndpoint{config: config, compressorRegistry: compressorRegistry}
 }
 
 type folderStateFileInfo struct {

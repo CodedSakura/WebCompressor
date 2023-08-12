@@ -1,17 +1,10 @@
 package compression
 
-import "WebCompressor/internal/utils"
-
 type TarCompressor struct {
-	compressorBase
 }
 
-func NewTarCompressor(utils *utils.Utils) *TarCompressor {
-	return &TarCompressor{
-		compressorBase{
-			utils: utils,
-		},
-	}
+func NewTarCompressor() *TarCompressor {
+	return &TarCompressor{}
 }
 
 func (c *TarCompressor) Mimetype() string {

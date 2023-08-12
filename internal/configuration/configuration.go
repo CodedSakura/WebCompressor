@@ -16,10 +16,3 @@ func Read() *Configuration {
 
 	return &Configuration{RootPath: rootPath}
 }
-
-func (c *Configuration) Verify() error {
-	//if !internal.dirExists(c.RootPath) {
-	//	return errors.New("root path does not exist")
-	//}
-	return nil
-}

@@ -1,8 +1,8 @@
 package compression
 
 import (
-	"WebCompressor/internal/utils"
 	"github.com/google/uuid"
+	"go.uber.org/fx"
 	"time"
 )
 
@@ -10,9 +10,6 @@ type Compressor interface {
 	Mimetype() string
 	Extension() string
 	Compress(targetPath string) (State, error)
-}
-type compressorBase struct {
-	utils *utils.Utils
 }
 
 type State struct {
@@ -34,4 +31,12 @@ func newState(c Compressor) State {
 		Progress:    0,
 		CreatedTime: time.Now(),
 	}
+}
+
+func AsCompressor(f any) any {
+	return fx.Annotate(
+		f,
+		fx.As(new(Compressor)),
+		fx.ResultTags(`group:"compressors"`),
+	)
 }

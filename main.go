@@ -5,8 +5,6 @@ import (
 	"WebCompressor/internal/configuration"
 	"WebCompressor/internal/endpoints"
 	"WebCompressor/internal/http"
-	"WebCompressor/internal/repository"
-	"WebCompressor/internal/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/fx"
 )
@@ -24,18 +22,17 @@ func main() {
 			endpoints.AsEndpoint(endpoints.NewFolderViewEndpoint),
 			endpoints.AsEndpoint(endpoints.NewRawEndpoint),
 			endpoints.AsEndpoint(endpoints.NewStatusEndpoint),
-			//api.New,
-			//view.New,
-			repository.New,
-			utils.New,
 			configuration.Read,
-			compression.NewRegistry,
+			fx.Annotate(
+				compression.NewRegistry,
+				fx.ParamTags(`group:"compressors"`),
+			),
+			compression.AsCompressor(compression.NewZipCompressor),
+			compression.AsCompressor(compression.NewTarCompressor),
+			compression.AsCompressor(compression.NewGZipCompressor),
 		),
 		fx.Invoke(
-			func(_ *gin.Engine, utils *utils.Utils, registry *compression.CompressorRegistry) {
-				registry.RegisterDefault(utils)
-			},
-			//func(*gin.Engine) {},
+			func(*gin.Engine) {},
 		),
 	).Run()
 }

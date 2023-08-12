@@ -1,24 +1,22 @@
 package compression
 
 import (
-	"WebCompressor/internal/utils"
+	"WebCompressor/internal/configuration"
 	"archive/zip"
 	"io"
 	"io/fs"
 	"os"
+	"path"
 	"path/filepath"
+	"strings"
 )
 
 type ZipCompressor struct {
-	compressorBase
+	config *configuration.Configuration
 }
 
-func NewZipCompressor(utils *utils.Utils) *ZipCompressor {
-	return &ZipCompressor{
-		compressorBase{
-			utils: utils,
-		},
-	}
+func NewZipCompressor(config *configuration.Configuration) *ZipCompressor {
+	return &ZipCompressor{config: config}
 }
 
 func (c *ZipCompressor) Mimetype() string {
@@ -40,8 +38,9 @@ func (c *ZipCompressor) Compress(targetPath string) (State, error) {
 	w := zip.NewWriter(file)
 	defer w.Close()
 
+	zipRootPath := path.Join(c.config.RootPath, targetPath)
 	err = filepath.Walk(
-		c.utils.GetAbsolutePath(targetPath),
+		zipRootPath,
 		func(path string, info fs.FileInfo, err error) error {
 			if err != nil {
 				return err
@@ -55,7 +54,7 @@ func (c *ZipCompressor) Compress(targetPath string) (State, error) {
 			}
 			defer file.Close()
 
-			f, err := w.Create(c.utils.GetRelativeToRoot(path))
+			f, err := w.Create(strings.TrimPrefix(zipRootPath, path))
 			if err != nil {
 				return err
 			}

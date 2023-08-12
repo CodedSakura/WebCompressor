@@ -4,7 +4,6 @@ import (
 	"WebCompressor/internal/compression"
 	"WebCompressor/internal/configuration"
 	"WebCompressor/internal/directorySize"
-	"WebCompressor/internal/repository"
 	"github.com/gin-gonic/gin"
 	"os"
 	path2 "path"
@@ -13,14 +12,13 @@ import (
 )
 
 type folderViewEndpoint struct {
-	repository         *repository.Repository
 	config             *configuration.Configuration
 	compressorRegistry *compression.CompressorRegistry
 }
 
 //goland:noinspection GoExportedFuncWithUnexportedType
-func NewFolderViewEndpoint(repository *repository.Repository, config *configuration.Configuration, compressorRegistry *compression.CompressorRegistry) *folderViewEndpoint {
-	return &folderViewEndpoint{repository: repository, config: config, compressorRegistry: compressorRegistry}
+func NewFolderViewEndpoint(config *configuration.Configuration, compressorRegistry *compression.CompressorRegistry) *folderViewEndpoint {
+	return &folderViewEndpoint{config: config, compressorRegistry: compressorRegistry}
 }
 
 type folderViewFileInfo struct {
@@ -73,8 +71,6 @@ func (e *folderViewEndpoint) Handle(c *gin.Context) {
 			files = append(files, fileInfo)
 		}
 	}
-
-	println("ff: ", len(folders), len(files))
 
 	c.HTML(200, "folderView.tmpl", gin.H{
 		"path":        path,
