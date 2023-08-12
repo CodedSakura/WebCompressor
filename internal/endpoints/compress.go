@@ -1,22 +1,37 @@
 package endpoints
 
 import (
+	"WebCompressor/internal/compression"
 	"github.com/gin-gonic/gin"
 )
 
 type compressEndpoint struct {
+	registry *compression.CompressorRegistry
 }
 
 //goland:noinspection GoExportedFuncWithUnexportedType
-func NewCompressEndpoint() *compressEndpoint {
-	return &compressEndpoint{}
+func NewCompressEndpoint(registry *compression.CompressorRegistry) *compressEndpoint {
+	return &compressEndpoint{registry: registry}
 }
 
 func (e *compressEndpoint) Handle(c *gin.Context) {
-	c.AbortWithStatus(501)
+	extension := c.Param("extension")
+	pathParam := c.Param("path")
+
+	compressor := e.registry.GetByExtension(extension)
+
+	state, err := (*compressor).Compress(pathParam)
+
+	if err != nil {
+		println(err)
+		c.AbortWithStatus(404)
+		return
+	}
+
+	c.JSON(200, state)
 }
 func (*compressEndpoint) Path() string {
-	return "/compress/*path"
+	return "/compress/:extension/*path"
 }
 func (*compressEndpoint) Method() string {
 	return "POST"

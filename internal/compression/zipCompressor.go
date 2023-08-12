@@ -54,7 +54,9 @@ func (c *ZipCompressor) Compress(targetPath string) (State, error) {
 			}
 			defer file.Close()
 
-			f, err := w.Create(strings.TrimPrefix(zipRootPath, path))
+			trimmedPath := strings.TrimPrefix(path, zipRootPath)
+			trimmedPath = strings.TrimPrefix(trimmedPath, "/")
+			f, err := w.Create(trimmedPath)
 			if err != nil {
 				return err
 			}
