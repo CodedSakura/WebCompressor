@@ -9,6 +9,8 @@ type compressEndpoint struct {
 	registry *compression.CompressorRegistry
 }
 
+var activeStates []*compression.State
+
 //goland:noinspection GoExportedFuncWithUnexportedType
 func NewCompressEndpoint(registry *compression.CompressorRegistry) *compressEndpoint {
 	return &compressEndpoint{registry: registry}
@@ -21,6 +23,8 @@ func (e *compressEndpoint) Handle(c *gin.Context) {
 	compressor := e.registry.GetByExtension(extension)
 
 	state, err := (*compressor).Compress(pathParam)
+
+	activeStates = append(activeStates, state)
 
 	if err != nil {
 		println(err)

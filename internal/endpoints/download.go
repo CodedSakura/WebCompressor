@@ -13,7 +13,16 @@ func NewDownloadEndpoint() *downloadEndpoint {
 }
 
 func (e *downloadEndpoint) Handle(c *gin.Context) {
-	c.AbortWithStatus(501)
+	id := c.Param("id")
+
+	for _, state := range activeStates {
+		if state.Id.String() == id {
+			c.File(state.Path)
+			return
+		}
+	}
+
+	c.AbortWithStatus(404)
 }
 func (*downloadEndpoint) Path() string {
 	return "/download/:id/*filename"
