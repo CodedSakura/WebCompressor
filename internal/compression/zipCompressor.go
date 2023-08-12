@@ -20,8 +20,8 @@ func (c *ZipCompressor) Mimetype() string {
 func (c *ZipCompressor) Extension() string {
 	return "zip"
 }
-func (c *ZipCompressor) Compress(targetPath string) State {
+func (c *ZipCompressor) Compress(targetPath string) (State, error) {
 	// placeholder
 	state := newState(c)
-	return state
+	return state, nil
 }

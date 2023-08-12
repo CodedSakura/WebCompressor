@@ -9,7 +9,7 @@ import (
 type Compressor interface {
 	Mimetype() string
 	Extension() string
-	Compress(targetPath string) State
+	Compress(targetPath string) (State, error)
 }
 type compressorBase struct {
 	utils *utils.Utils
