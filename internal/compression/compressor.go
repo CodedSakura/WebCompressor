@@ -3,6 +3,7 @@ package compression
 import (
 	"github.com/google/uuid"
 	"go.uber.org/fx"
+	"path"
 	"time"
 )
 
@@ -27,7 +28,7 @@ func newState(c Compressor) *State {
 	id := uuid.New()
 	return &State{
 		Id:          id,
-		Path:        id.String() + "." + c.Extension(),
+		Path:        path.Join("archives", id.String()+"."+c.Extension()),
 		Progress:    0,
 		CreatedTime: time.Now(),
 	}

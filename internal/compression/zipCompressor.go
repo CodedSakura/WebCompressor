@@ -31,6 +31,13 @@ func (c *ZipCompressor) Compress(targetPath string) (*State, error) {
 
 	go func() {
 		// https://stackoverflow.com/a/63233911/8672525
+		err := os.MkdirAll(filepath.Dir(state.Path), 0775)
+		if err != nil {
+			state.Progress = -1
+			state.FinishedTime = time.Now()
+			return
+		}
+
 		file, err := os.Create(state.Path)
 		if err != nil {
 			state.Progress = -1
