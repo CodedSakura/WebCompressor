@@ -37,15 +37,32 @@ func (e *folderViewEndpoint) Handle(c *gin.Context) {
 		}
 	}
 
-	dir, err := os.ReadDir(
-		path2.Join(e.config.RootPath, pathParam),
-	)
+	fullPath := path2.Join(e.config.RootPath, pathParam)
+	dir, err := os.ReadDir(fullPath)
+	if err != nil {
+		c.AbortWithStatus(404)
+		return
+	}
+
+	stat, err := os.Stat(fullPath)
 	if err != nil {
 		c.AbortWithStatus(404)
 		return
 	}
 
 	var folders, files []folderViewFileInfo
+
+	calculate, err := directorySize.Calculate(fullPath)
+	if err != nil {
+		c.AbortWithStatus(404)
+		return
+	}
+	rootInfo := folderViewFileInfo{
+		Name:         ".",
+		Size:         calculate,
+		LastModified: stat.ModTime(),
+	}
+	folders = append(folders, rootInfo)
 
 	for _, entry := range dir {
 		info, err := entry.Info()
