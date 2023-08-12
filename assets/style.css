@@ -2,6 +2,8 @@
     background: #424242;
     color: #fffe;
     font-family: sans-serif;
+    font-size: 18px;
+    line-height: 22px;
 }
 
 a, a:visited {
@@ -11,12 +13,12 @@ a, a:visited {
 #path {
     display: flex;
     flex-direction: row;
+    font-size: 26px;
+    line-height: normal;
 }
-
 #path > div {
     margin: 2px 0 4px;
 }
-
 #path > div > a {
     text-decoration: none;
     background: #29B6F640;
@@ -24,7 +26,6 @@ a, a:visited {
     margin: 0 2px;
     border-radius: 4px;
 }
-
 #path > div:first-of-type > a {
     margin-left: 0;
 }
@@ -32,19 +33,34 @@ a, a:visited {
 #contents {
     display: grid;
     grid-template-columns: 1fr auto auto auto;
-    gap: 4px;
+    /*gap: 4px;*/
 }
-
 #contents .folder::after {
     content: '/'
 }
 
-.download {
-    display: flex;
-    flex-direction: row;
+#contents .filesize {
+    text-align: right;
 }
 
-.download > div {
-    margin: 0 2px;
-    text-decoration: underline;
+#contents .row {
+    display: contents;
+}
+
+#contents .row:first-of-type {
+    font-weight: bold;
+}
+
+#contents .row > * {
+    padding: 2px;
+}
+
+#contents .row:not(:first-of-type):hover > * {
+    background: #fff2;
+}
+
+.download {
+    display: grid;
+    gap: 4px;
+    grid-auto-flow: column;
 }

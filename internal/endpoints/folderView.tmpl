@@ -15,30 +15,42 @@
     {{- end }}
 </div>
 <div id="contents">
-    {{ if $fullPath | ne "" }}
-    <a href="../" class="folder">..</a>
-    <div></div>
-    <div></div>
-    <div></div>
-    {{ end }}
+    <div class="row header">
+        <div>Path</div>
+        <div>Modified on</div>
+        <div>Size</div>
+        <div>Download</div>
+    </div>
+    {{- if $fullPath | ne "" }}
+    <div class="row">
+        <a href="../" class="folder">..</a>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    {{- end }}
     {{- range .folders }}
-    <a href="{{ .Name }}/" class="folder">{{ .Name }}</a>
-    <div class="filesize">{{ .Size }}</div>
-    <div>{{ .LastModified.Format "2006-01-02 15:04:05 -07:00" }}</div>
-    <div class="download">
-        {{- range $.compressors }}
-        <div>{{ .Extension }}</div>
-        {{- end }}
+    <div class="row">
+        <a href="{{ .Name }}/" class="folder">{{ .Name }}</a>
+        <div>{{ .LastModified.Unix }}</div>
+        <div class="filesize">{{ .Size }} B</div>
+        <div class="download">
+            {{- range $.compressors }}
+            <button>{{ .Extension }}</button>
+            {{- end }}
+        </div>
     </div>
     {{- end }}
     {{- range .files }}
-    <a href="/raw{{ $fullPath }}/{{ .Name }}" class="file">{{ .Name }}</a>
-    <div class="filesize">{{ .Size }}</div>
-    <div>{{ .LastModified.Format "2006-01-02 15:04:05 -07:00" }}</div>
-    <div class="download">
-        {{- range $.compressors }}
-        <div>{{ .Extension }}</div>
-        {{- end }}
+    <div class="row">
+        <a href="/raw{{ $fullPath }}/{{ .Name }}" class="file">{{ .Name }}</a>
+        <div>{{ .LastModified.Unix }}</div>
+        <div class="filesize">{{ .Size }} B</div>
+        <div class="download">
+            {{- range $.compressors }}
+            <button>{{ .Extension }}</button>
+            {{- end }}
+        </div>
     </div>
     {{- end }}
 </div>
