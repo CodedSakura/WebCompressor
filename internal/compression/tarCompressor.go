@@ -2,6 +2,7 @@ package compression
 
 import (
 	"WebCompressor/internal/configuration"
+	"WebCompressor/internal/directorySize"
 	"archive/tar"
 	"io"
 	"io/fs"
@@ -51,6 +52,10 @@ func (c *TarCompressor) Compress(targetPath string) (*State, error) {
 		defer w.Close()
 
 		tarRootPath := path.Join(c.config.RootPath, targetPath)
+
+		totalFileCount, err := directorySize.CountFiles(tarRootPath)
+		processedFiles := 0
+
 		err = filepath.Walk(
 			tarRootPath,
 			func(path string, info fs.FileInfo, err error) error {
@@ -71,8 +76,7 @@ func (c *TarCompressor) Compress(targetPath string) (*State, error) {
 				trimmedPath = "./" + trimmedPath
 				header.Name = trimmedPath
 
-				err = w.WriteHeader(header)
-				if err != nil {
+				if err := w.WriteHeader(header); err != nil {
 					return err
 				}
 
@@ -86,8 +90,12 @@ func (c *TarCompressor) Compress(targetPath string) (*State, error) {
 				}
 				defer file.Close()
 
-				_, err = io.Copy(w, file)
-				return err
+				if _, err := io.Copy(w, file); err != nil {
+					return err
+				}
+				processedFiles += 1
+				state.Progress = float32(processedFiles) / float32(totalFileCount)
+				return nil
 			},
 		)
 		state.Progress = 1

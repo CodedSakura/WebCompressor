@@ -2,6 +2,7 @@ package compression
 
 import (
 	"WebCompressor/internal/configuration"
+	"WebCompressor/internal/directorySize"
 	"archive/zip"
 	"io"
 	"io/fs"
@@ -50,6 +51,10 @@ func (c *ZipCompressor) Compress(targetPath string) (*State, error) {
 		defer w.Close()
 
 		zipRootPath := path.Join(c.config.RootPath, targetPath)
+
+		totalFileCount, err := directorySize.CountFiles(zipRootPath)
+		processedFiles := 0
+
 		err = filepath.Walk(
 			zipRootPath,
 			func(path string, info fs.FileInfo, err error) error {
@@ -60,6 +65,7 @@ func (c *ZipCompressor) Compress(targetPath string) (*State, error) {
 				if info.IsDir() {
 					return nil
 				}
+
 				file, err := os.Open(path)
 				if err != nil {
 					return err
@@ -73,8 +79,12 @@ func (c *ZipCompressor) Compress(targetPath string) (*State, error) {
 					return err
 				}
 
-				_, err = io.Copy(f, file)
-				return err
+				if _, err := io.Copy(f, file); err != nil {
+					return err
+				}
+				processedFiles += 1
+				state.Progress = float32(processedFiles) / float32(totalFileCount)
+				return nil
 			},
 		)
 		state.Progress = 1
