@@ -8,28 +8,25 @@ import (
 	"WebCompressor/internal/repository"
 	"WebCompressor/internal/utils"
 	"WebCompressor/internal/view"
+	"github.com/gin-gonic/gin"
+	"go.uber.org/fx"
 )
 
 func main() {
-	config := configuration.Read()
-
-	err := config.Verify()
-	if err != nil {
-		panic(err)
-	}
-
-	utilsI := utils.New(config)
-
-	registry := compression.NewRegistry()
-	registry.RegisterDefault(utilsI)
-
-	repo := repository.New(utilsI)
-
-	viewI := view.New(repo, registry, utilsI)
-
-	apiI := api.New(repo, registry, utilsI)
-
-	httpI := http.New(viewI, apiI, registry)
-	httpI.RegisterPaths()
-	httpI.Run()
+	fx.New(
+		fx.Provide(
+			http.New,
+			api.New,
+			view.New,
+			repository.New,
+			utils.New,
+			configuration.Read,
+			compression.NewRegistry,
+		),
+		fx.Invoke(
+			func(_ *gin.Engine, utils *utils.Utils, registry *compression.CompressorRegistry) {
+				registry.RegisterDefault(utils)
+			},
+		),
+	).Run()
 }

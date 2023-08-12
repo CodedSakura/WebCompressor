@@ -4,7 +4,9 @@ import (
 	"WebCompressor/internal/api"
 	"WebCompressor/internal/compression"
 	"WebCompressor/internal/view"
+	"context"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/fx"
 	"net/http"
 	"os"
 )
@@ -16,33 +18,44 @@ type Http struct {
 	gin                *gin.Engine
 }
 
-func New(view *view.View, api *api.Api, compressorRegistry *compression.CompressorRegistry) *Http {
+func New(lc fx.Lifecycle, api *api.Api, view *view.View) *gin.Engine {
 	gin.ForceConsoleColor()
 
 	engine := gin.Default()
 
-	return &Http{view: view, api: api, compressorRegistry: compressorRegistry, gin: engine}
+	lc.Append(fx.Hook{
+		OnStart: func(ctx context.Context) error {
+			engine.LoadHTMLGlob("internal/view/*.tmpl")
+
+			registerPaths(engine, api, view)
+
+			go engine.Run()
+			return nil
+		},
+	})
+
+	return engine
 }
 
-func (h *Http) RegisterPaths() {
-	h.gin.LoadHTMLGlob("internal/view/*.tmpl")
+func registerPaths(engine *gin.Engine, api *api.Api, view *view.View) {
+	engine.LoadHTMLGlob("internal/view/*.tmpl")
 
-	h.gin.Static("/assets", "./assets")
+	engine.Static("/assets", "./assets")
 
-	h.gin.GET("/", func(c *gin.Context) {
+	engine.GET("/", func(c *gin.Context) {
 		c.Redirect(http.StatusMovedPermanently, "/view/")
 	})
 
-	h.gin.GET("/view/*path", h.view.FolderView)
-	h.gin.GET("/raw/*path", h.view.RawView)
+	engine.GET("/view/*path", view.FolderView)
+	engine.GET("/raw/*path", view.RawView)
 
-	h.gin.GET("/download/:id", h.view.Download)
+	engine.GET("/download/:id", view.Download)
 
-	apiGroup := h.gin.Group("/api")
+	apiGroup := engine.Group("/api")
 	{
-		apiGroup.GET("/view/*path", h.api.View)
-		apiGroup.POST("/compress/:extension", h.api.Compress)
-		apiGroup.GET("/status/:id", h.api.Status)
+		apiGroup.GET("/view/*path", api.View)
+		apiGroup.POST("/compress/:extension", api.Compress)
+		apiGroup.GET("/status/:id", api.Status)
 	}
 }
 
