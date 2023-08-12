@@ -7,6 +7,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"strings"
 )
 
 type Utils struct {
@@ -52,4 +53,8 @@ func (u *Utils) CalculateDir(relativePath string) (int64, int, error) {
 
 func (u *Utils) GetAbsolutePath(relativePath string) string {
 	return path.Join(u.configuration.RootPath, relativePath)
+}
+
+func (u *Utils) GetRelativeToRoot(absolutePath string) string {
+	return strings.TrimPrefix(absolutePath, u.configuration.RootPath)
 }
