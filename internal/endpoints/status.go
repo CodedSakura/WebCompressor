@@ -15,24 +15,22 @@ func NewStatusEndpoint() *statusEndpoint {
 func (e *statusEndpoint) Handle(c *gin.Context) {
 	id := c.Param("id")
 
-	for _, state := range activeStates {
-		if state.Id.String() == id {
-			obj := gin.H{
-				"id":       state.Id,
-				"cratedAt": state.CreatedTime,
-				"progress": state.Progress,
-			}
-
-			if state.IsDone() {
-				obj["finishedAt"] = state.FinishedTime
-			}
-			if state.HasSucceeded() {
-				obj["downloadUrl"] = "/download/" + id
-			}
-
-			c.JSON(200, obj)
-			return
+	if state, ok := activeStates[id]; ok {
+		obj := gin.H{
+			"id":       state.Id,
+			"cratedAt": state.CreatedTime,
+			"progress": state.Progress,
 		}
+
+		if state.IsDone() {
+			obj["finishedAt"] = state.FinishedTime
+		}
+		if state.HasSucceeded() {
+			obj["downloadUrl"] = "/download/" + id
+		}
+
+		c.JSON(200, obj)
+		return
 	}
 
 	c.AbortWithStatus(404)

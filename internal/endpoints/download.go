@@ -15,16 +15,14 @@ func NewDownloadEndpoint() *downloadEndpoint {
 func (e *downloadEndpoint) Handle(c *gin.Context) {
 	id := c.Param("id")
 
-	for _, state := range activeStates {
-		if state.Id.String() == id {
-			if state.HasSucceeded() {
-				c.File(state.Path)
-				return
-			}
-			if state.HasFailed() {
-				c.AbortWithStatus(400)
-				return
-			}
+	if state, ok := activeStates[id]; ok {
+		if state.HasSucceeded() {
+			c.File(state.Path)
+			return
+		}
+		if state.HasFailed() {
+			c.AbortWithStatus(400)
+			return
 		}
 	}
 
