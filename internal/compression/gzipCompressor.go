@@ -53,9 +53,6 @@ func (c *GZipCompressor) Compress(targetPath string) (*State, error) {
 				if err != nil {
 					return err
 				}
-				if !info.Mode().IsRegular() {
-					return nil
-				}
 
 				header, err := tar.FileInfoHeader(info, info.Name())
 				if err != nil {
@@ -63,12 +60,20 @@ func (c *GZipCompressor) Compress(targetPath string) (*State, error) {
 				}
 
 				trimmedPath := strings.TrimPrefix(path, tarRootPath)
+				if info.IsDir() {
+					trimmedPath = trimmedPath + "/"
+				}
 				trimmedPath = strings.TrimPrefix(trimmedPath, "/")
+				trimmedPath = "./" + trimmedPath
 				header.Name = trimmedPath
 
 				err = w.WriteHeader(header)
 				if err != nil {
 					return err
+				}
+
+				if info.IsDir() {
+					return nil
 				}
 
 				file, err := os.Open(path)
