@@ -59,6 +59,11 @@ func (c *GZipCompressor) Compress(targetPath string) (*State, error) {
 
 		totalFileCount, err := directorySize.CountFiles(tarRootPath)
 		processedFiles := 0
+		if err != nil {
+			state.Progress = -1
+			state.FinishedTime = time.Now()
+			return
+		}
 
 		err = filepath.Walk(
 			tarRootPath,
@@ -72,7 +77,10 @@ func (c *GZipCompressor) Compress(targetPath string) (*State, error) {
 					return err
 				}
 
-				trimmedPath := strings.TrimPrefix(path, tarRootPath)
+				trimmedPath := strings.TrimPrefix(
+					path,
+					filepath.Dir(tarRootPath),
+				)
 				if info.IsDir() {
 					trimmedPath = trimmedPath + "/"
 				}

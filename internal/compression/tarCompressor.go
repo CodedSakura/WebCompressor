@@ -68,7 +68,10 @@ func (c *TarCompressor) Compress(targetPath string) (*State, error) {
 					return err
 				}
 
-				trimmedPath := strings.TrimPrefix(path, tarRootPath)
+				trimmedPath := strings.TrimPrefix(
+					path,
+					filepath.Dir(tarRootPath),
+				)
 				if info.IsDir() {
 					trimmedPath = trimmedPath + "/"
 				}
