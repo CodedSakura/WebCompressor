@@ -3,12 +3,11 @@ package http
 import (
 	"WebCompressor/internal/api"
 	"WebCompressor/internal/compression"
+	"WebCompressor/internal/endpoints"
 	"WebCompressor/internal/view"
 	"context"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/fx"
-	"net/http"
-	"os"
 )
 
 type Http struct {
@@ -18,16 +17,19 @@ type Http struct {
 	gin                *gin.Engine
 }
 
-func New(lc fx.Lifecycle, api *api.Api, view *view.View) *gin.Engine {
+func New(endpoints []endpoints.Endpoint, lc fx.Lifecycle) *gin.Engine {
 	gin.ForceConsoleColor()
 
 	engine := gin.Default()
 
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
-			engine.LoadHTMLGlob("internal/view/*.tmpl")
+			engine.LoadHTMLGlob("internal/endpoints/*.tmpl")
+			engine.Static("/assets", "./assets")
 
-			registerPaths(engine, api, view)
+			for _, endpoint := range endpoints {
+				engine.Handle(endpoint.Method(), endpoint.Path(), endpoint.Handle)
+			}
 
 			go engine.Run()
 			return nil
@@ -35,35 +37,4 @@ func New(lc fx.Lifecycle, api *api.Api, view *view.View) *gin.Engine {
 	})
 
 	return engine
-}
-
-func registerPaths(engine *gin.Engine, api *api.Api, view *view.View) {
-	engine.LoadHTMLGlob("internal/view/*.tmpl")
-
-	engine.Static("/assets", "./assets")
-
-	engine.GET("/", func(c *gin.Context) {
-		c.Redirect(http.StatusMovedPermanently, "/view/")
-	})
-
-	engine.GET("/view/*path", view.FolderView)
-	engine.GET("/raw/*path", view.RawView)
-
-	engine.GET("/download/:id", view.Download)
-
-	apiGroup := engine.Group("/api")
-	{
-		apiGroup.GET("/view/*path", api.View)
-		apiGroup.POST("/compress/:extension", api.Compress)
-		apiGroup.GET("/status/:id", api.Status)
-	}
-}
-
-func (h *Http) Run() {
-	err := h.gin.Run()
-	if err != nil {
-		println("Failed to start webserver")
-		os.Exit(1)
-		return
-	}
 }
