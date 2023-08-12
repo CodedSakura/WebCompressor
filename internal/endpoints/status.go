@@ -17,7 +17,20 @@ func (e *statusEndpoint) Handle(c *gin.Context) {
 
 	for _, state := range activeStates {
 		if state.Id.String() == id {
-			c.JSON(200, state)
+			obj := gin.H{
+				"id":       state.Id,
+				"cratedAt": state.CreatedTime,
+				"progress": state.Progress,
+			}
+
+			if state.IsDone() {
+				obj["finishedAt"] = state.FinishedTime
+			}
+			if state.HasSucceeded() {
+				obj["downloadUrl"] = "/download/" + id
+			}
+
+			c.JSON(200, obj)
 			return
 		}
 	}

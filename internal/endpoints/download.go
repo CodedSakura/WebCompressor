@@ -17,8 +17,14 @@ func (e *downloadEndpoint) Handle(c *gin.Context) {
 
 	for _, state := range activeStates {
 		if state.Id.String() == id {
-			c.File(state.Path)
-			return
+			if state.HasSucceeded() {
+				c.File(state.Path)
+				return
+			}
+			if state.HasFailed() {
+				c.AbortWithStatus(400)
+				return
+			}
 		}
 	}
 

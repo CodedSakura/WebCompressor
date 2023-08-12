@@ -21,8 +21,14 @@ type State struct {
 	FinishedTime time.Time
 }
 
-func (s State) IsDone() bool {
+func (s State) HasSucceeded() bool {
 	return s.Progress >= 1
+}
+func (s State) HasFailed() bool {
+	return s.Progress < 0
+}
+func (s State) IsDone() bool {
+	return s.HasSucceeded() || s.HasFailed()
 }
 func newState(c Compressor) *State {
 	id := uuid.New()

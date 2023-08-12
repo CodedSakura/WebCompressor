@@ -32,7 +32,12 @@ func (e *compressEndpoint) Handle(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, state)
+	c.JSON(200, gin.H{
+		"id":                 state.Id,
+		"cratedAt":           state.CreatedTime,
+		"progress":           state.Progress,
+		"monitorProgressUrl": "/status/" + state.Id.String(),
+	})
 }
 func (*compressEndpoint) Path() string {
 	return "/compress/:extension/*path"
