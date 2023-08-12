@@ -13,7 +13,7 @@ func (c *TarCompressor) Mimetype() string {
 func (c *TarCompressor) Extension() string {
 	return "tar"
 }
-func (c *TarCompressor) Compress(targetPath string) (State, error) {
+func (c *TarCompressor) Compress(targetPath string) (*State, error) {
 	// placeholder
 	return newState(c), nil
 }

@@ -9,7 +9,7 @@ import (
 type Compressor interface {
 	Mimetype() string
 	Extension() string
-	Compress(targetPath string) (State, error)
+	Compress(targetPath string) (*State, error)
 }
 
 type State struct {
@@ -23,9 +23,9 @@ type State struct {
 func (s State) IsDone() bool {
 	return s.Progress >= 1
 }
-func newState(c Compressor) State {
+func newState(c Compressor) *State {
 	id := uuid.New()
-	return State{
+	return &State{
 		Id:          id,
 		Path:        id.String() + "." + c.Extension(),
 		Progress:    0,

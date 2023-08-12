@@ -13,7 +13,7 @@ func (c *GZipCompressor) Mimetype() string {
 func (c *GZipCompressor) Extension() string {
 	return "tar.gz"
 }
-func (c *GZipCompressor) Compress(targetPath string) (State, error) {
+func (c *GZipCompressor) Compress(targetPath string) (*State, error) {
 	// placeholder
 	return newState(c), nil
 }
