@@ -11,6 +11,9 @@ func Calculate(path string) (int64, error) {
 		if err != nil {
 			return err
 		}
+		if info.IsDir() {
+			return nil
+		}
 		totalSize += info.Size()
 		return err
 	})
