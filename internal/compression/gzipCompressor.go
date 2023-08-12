@@ -1,6 +1,17 @@
 package compression
 
+import "WebCompressor/internal/utils"
+
 type GZipCompressor struct {
+	compressorBase
+}
+
+func NewGZipCompressor(utils *utils.Utils) *GZipCompressor {
+	return &GZipCompressor{
+		compressorBase{
+			utils: utils,
+		},
+	}
 }
 
 func (c *GZipCompressor) Mimetype() string {
@@ -11,5 +22,5 @@ func (c *GZipCompressor) Extension() string {
 }
 func (c *GZipCompressor) Compress(targetPath string) State {
 	// placeholder
-	return newState(c, targetPath)
+	return newState(c)
 }

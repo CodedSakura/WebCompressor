@@ -18,10 +18,10 @@ func main() {
 		panic(err)
 	}
 
-	registry := compression.NewRegistry()
-	registry.RegisterDefault()
-
 	utilsI := utils.New(config)
+
+	registry := compression.NewRegistry()
+	registry.RegisterDefault(utilsI)
 
 	repo := repository.New(utilsI)
 
