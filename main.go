@@ -21,6 +21,7 @@ func main() {
 			endpoints.AsEndpoint(endpoints.NewFolderStateEndpoint),
 			endpoints.AsEndpoint(endpoints.NewFolderViewEndpoint),
 			endpoints.AsEndpoint(endpoints.NewRawEndpoint),
+			endpoints.AsEndpoint(endpoints.NewRootEndpoint),
 			endpoints.AsEndpoint(endpoints.NewStatusEndpoint),
 			configuration.Read,
 			fx.Annotate(
