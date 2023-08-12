@@ -29,16 +29,14 @@ a, a:visited {
     margin-left: 0;
 }
 
-#folders {
-    display: grid;
-    grid-template-columns: 1fr auto auto auto auto;
-    gap: 4px;
-}
-
-#files {
+#contents {
     display: grid;
     grid-template-columns: 1fr auto auto auto;
     gap: 4px;
+}
+
+#contents .folder::after {
+    content: '/'
 }
 
 .download {

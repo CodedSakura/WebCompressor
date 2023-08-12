@@ -14,12 +14,16 @@
     <div><a href="/view{{ $fullPath }}/">{{ . }}/</a></div>
     {{- end }}
 </div>
-{{- if .folders }}
-<div id="folders">
-    {{- range .folders }}
-    <div><a href="{{ .Name }}">{{ .Name }}</a></div>
+<div id="contents">
+    {{ if $fullPath | ne "" }}
+    <a href="../" class="folder">..</a>
     <div></div>
-    <div>{{ .Size }}</div>
+    <div></div>
+    <div></div>
+    {{ end }}
+    {{- range .folders }}
+    <a href="{{ .Name }}/" class="folder">{{ .Name }}</a>
+    <div class="filesize">{{ .Size }}</div>
     <div>{{ .LastModified.Format "2006-01-02 15:04:05 -07:00" }}</div>
     <div class="download">
         {{- range $.compressors }}
@@ -27,13 +31,9 @@
         {{- end }}
     </div>
     {{- end }}
-</div>
-{{- end }}
-{{- if .files }}
-<div id="files">
     {{- range .files }}
-    <div>{{ .Name }}</div>
-    <div>{{ .Size }}</div>
+    <a href="/raw{{ $fullPath }}/{{ .Name }}" class="file">{{ .Name }}</a>
+    <div class="filesize">{{ .Size }}</div>
     <div>{{ .LastModified.Format "2006-01-02 15:04:05 -07:00" }}</div>
     <div class="download">
         {{- range $.compressors }}
@@ -42,6 +42,5 @@
     </div>
     {{- end }}
 </div>
-{{- end }}
 </body>
 </html>
