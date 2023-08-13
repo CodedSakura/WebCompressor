@@ -32,24 +32,27 @@
     {{- end }}
     {{- range .folders }}
     <div class="row">
+        {{ $path := printf "%s/%s" $fullPath .Name -}}
+        {{- if .Name | eq "." }}{{ $path = printf "%s/" $fullPath }}{{ end -}}
         <a href="{{ .Name }}/" class="folder">{{ .Name }}</a>
         <div class="modified">{{ .LastModified.Unix }}</div>
         <div class="filesize">{{ .Size }} B</div>
         <div class="download">
             {{- range $.compressors }}
-            <button>{{ .Extension }}</button>
+            <button data-path="{{ $path }}">{{ .Extension }}</button>
             {{- end }}
         </div>
     </div>
     {{- end }}
     {{- range .files }}
     <div class="row">
-        <a href="/raw{{ $fullPath }}/{{ .Name }}" class="file">{{ .Name }}</a>
+        {{ $path := printf "%s/%s" $fullPath .Name -}}
+        <a href="/raw{{ $path }}" class="file">{{ .Name }}</a>
         <div class="modified">{{ .LastModified.Unix }}</div>
         <div class="filesize">{{ .Size }} B</div>
         <div class="download">
             {{- range $.compressors }}
-            <button>{{ .Extension }}</button>
+            <button data-path="{{ $path }}">{{ .Extension }}</button>
             {{- end }}
         </div>
     </div>

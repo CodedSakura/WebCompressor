@@ -65,3 +65,56 @@ a, a:visited {
     gap: 4px;
     grid-auto-flow: column;
 }
+
+#compression {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#compression > div {
+    margin: 4px;
+    padding: 4px;
+    border-radius: 4px;
+    background: #222;
+}
+
+#compression > div > div:has(> button):not(:has(> span)) {
+    display: flex;
+    justify-content: space-between;
+}
+
+#compression > div > div:has(> button):not(:has(> span)) > button {
+    margin: 2px;
+}
+
+#compression div:has(> span) button {
+    float: right;
+}
+
+#compression .progress {
+    position: relative;
+    z-index: 2;
+}
+
+#compression .progress > span {
+    position: relative;
+    z-index: 2;
+}
+
+#compression .progress > span.bar {
+    position: absolute;
+    content: '';
+    top: 0;
+    bottom: 0;
+    left: 0;
+    background: darkgoldenrod;
+    z-index: 1;
+}
+
+#compression .progress.finished > span.bar {
+    background: green;
+}
+
+#compression .progress.failed > span.bar {
+    background: red;
+}

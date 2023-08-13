@@ -34,7 +34,7 @@ func (e *compressEndpoint) Handle(c *gin.Context) {
 
 	c.JSON(200, gin.H{
 		"id":                 state.Id,
-		"cratedAt":           state.CreatedTime,
+		"createdAt":          state.CreatedTime,
 		"progress":           state.Progress,
 		"monitorProgressUrl": "/status/" + state.Id.String(),
 	})
