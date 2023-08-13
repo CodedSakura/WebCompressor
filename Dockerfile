@@ -9,6 +9,8 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o "/WebCompressor"
 
 FROM alpine
 
+WORKDIR /app
+
 COPY . .
 COPY --from=builder /WebCompressor /
 
