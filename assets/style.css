@@ -36,7 +36,8 @@ a, a:visited {
     /*gap: 4px;*/
 }
 #contents .folder::after {
-    content: '/'
+    content: '/';
+    color: #fffe;
 }
 
 #contents .filesize {

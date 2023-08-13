@@ -4,6 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>WebCompressor</title>
     <link rel="stylesheet" href="/assets/style.css">
+    <script type="module" src="/assets/script.js"></script>
 </head>
 <body>
 <div id="path">
@@ -32,7 +33,7 @@
     {{- range .folders }}
     <div class="row">
         <a href="{{ .Name }}/" class="folder">{{ .Name }}</a>
-        <div>{{ .LastModified.Unix }}</div>
+        <div class="modified">{{ .LastModified.Unix }}</div>
         <div class="filesize">{{ .Size }} B</div>
         <div class="download">
             {{- range $.compressors }}
@@ -44,7 +45,7 @@
     {{- range .files }}
     <div class="row">
         <a href="/raw{{ $fullPath }}/{{ .Name }}" class="file">{{ .Name }}</a>
-        <div>{{ .LastModified.Unix }}</div>
+        <div class="modified">{{ .LastModified.Unix }}</div>
         <div class="filesize">{{ .Size }} B</div>
         <div class="download">
             {{- range $.compressors }}
